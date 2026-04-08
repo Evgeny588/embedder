@@ -1,0 +1,6 @@
+chonkie
+torch
+sentence-transformers
+python-dotenv
+argparse
+loguru

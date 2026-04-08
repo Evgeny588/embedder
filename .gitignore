@@ -1,0 +1,7 @@
+__pycache__
+.vscode
+logs/*
+model_cache/*
+.env
+outputs/*
+raw_text/*
