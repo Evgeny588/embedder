@@ -1,6 +1,7 @@
-chonkie
-torch
-sentence-transformers
-python-dotenv
-argparse
-loguru
+chonkie==1.6.2
+chonkie-core==0.10.1
+loguru==0.7.3
+python-dotenv==1.2.1
+sentence-transformers==5.3.0
+torch==2.5.1
+

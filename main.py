@@ -8,17 +8,6 @@ from modules import (
 )
 
 
-logger.remove()
-logger.add(sys.stderr, level="INFO")
-logger.add(
-    'logs/main_logs.log',
-    format = '{time} | {level} | {message}',
-    level = 'DEBUG',
-    rotation = '5 MB',
-    retention = '5 days',
-    compression = 'zip'
-)
-
 def parse_args():
     parser = ArgumentParser()
 
@@ -50,10 +39,10 @@ def main():
     else:
         with open(f'raw_text/{args.filename}') as file:
             raw_text = file.read()
-        logger.debug('Successful text parse')
+        logger.debug(f'Successful text parse. Length of text = {len(raw_text)}')
 
     model.to(args.device)
-    logger.info(f'Model run in {model.device}')
+    logger.info(f'Model run in {model.device}') # После отладки можно поменять уровень на DEBUG или удалить
 
     logger.debug('Start run model.')
     embedding = embedder(
@@ -61,11 +50,11 @@ def main():
         model = model,
         chunker = chunker
     )
-    logger.debug('Successful model worked.')
 
-    logger.debug('Start saving embedding in file.')
+    logger.debug('Successful model worked. Start saving embbeding in file.')
+
     with open(
-        file = 'outputs/out.txt',
+        file = 'outputs/out.txt', # Файл перезаписывается каждый раз, после вызова модели
         mode = 'w'
         ) as file:
 
@@ -74,4 +63,18 @@ def main():
 
 
 if __name__ == '__main__':
+    logger.remove()
+    logger.add(
+        sys.stderr,
+        format = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{file}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="INFO"  # Чтобы в консоль выводились только логи уровня INFO
+    )
+    logger.add(
+        'logs/logs.log',
+        format = '{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {file}:{line} | {message}',
+        level = 'DEBUG', # В файл пишутся все логи, начиная с уровня DEBUG
+        rotation = '5 MB',
+        retention = '5 days',
+        compression = 'zip'
+    )
     main()
