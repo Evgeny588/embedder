@@ -25,8 +25,11 @@ logger.add(
 
 load_dotenv()
 
-flag_cache_model = any(Path('model_cache/').iterdir())
-logger.debug(f'Cache model is {flag_cache_model}')
+cache_dir = Path('model_cache/')
+if cache_dir.exists():
+    flag_cache_model = any(not f.name.startswith('.') for f in cache_dir.iterdir())
+else:
+    flag_cache_model = False
 
 model = SentenceTransformer(
     model_name_or_path = os.getenv('CHECKPOINT'),
