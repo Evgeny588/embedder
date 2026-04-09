@@ -41,7 +41,26 @@ chunker = SentenceChunker(
 )
 
 
-def embedder(text, model, chunker):
+def embedder(
+      text: str,
+      model: SentenceTransformer,
+      chunker: SentenceChunker
+      ) -> list[float]:
+    """
+    Преобразует текст в векторное представление (эмбеддинг).
+    
+    Текст разбивается на чанки, каждый кодируется моделью, 
+    затем применяется гибридное пулинг-агрегирование: (mean + max) / 2.
+    
+    Args:
+        text: Исходный текст для эмбеддинга.
+        model: Загруженная модель SentenceTransformer.
+        chunker: Экземпляр SentenceChunker для токенизации.
+    
+    Returns:
+        list[float]: Финальный вектор-эмбеддинг в виде списка чисел.
+    """
+
     chunks = chunker.chunk(text)
     logger.debug(f'Num chunks = {len(chunks)}')
     chunk_texts = ['passage: ' + c.text for c in chunks]
